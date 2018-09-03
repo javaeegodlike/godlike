@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javaman.dao.ProductMapper">
+    <resultMap id="productMap" type="com.javaman.domain.Product">
+        <id column="p_id" property="id"/>
+        <result column="p_name" property="name"/>
+        <result column="p_price" property="price"/>
+    </resultMap>
+
+    <insert id="addProduct" parameterType="com.javaman.domain.Product" useGeneratedKeys="true" keyProperty="id">
+        insert into t_product(p_name,p_price) VALUES (#{name},#{price})
+    </insert>
+
+    <select id="selectById" parameterType="int" resultMap="productMap">
+        select * from t_product WHERE p_id=#{id}
+    </select>
+
+    <select id="findAll" resultMap="productMap">
+        SELECT * FROM t_product;
+    </select>
+
+    <delete id="delProduct" parameterType="int">
+        delete from t_product where p_id=#{id}
+    </delete>
+
+    <update id="updateProduct" parameterType="com.javaman.domain.Product">
+        UPDATE `t_product`
+	SET
+	`p_name` = #{name} ,
+	`p_price` = #{price}
+	WHERE
+	`p_id` = #{id} ;
+    </update>
+
+</mapper>
