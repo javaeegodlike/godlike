@@ -6,6 +6,9 @@
         <result column="p_name" property="name"/>
         <result column="p_price" property="price"/>
     </resultMap>
+    <sql id="allparam">
+        p_id,p_name,p_price
+    </sql>
 
     <insert id="addProduct" parameterType="com.javaman.domain.Product" useGeneratedKeys="true" keyProperty="id">
         insert into t_product(p_name,p_price) VALUES (#{name},#{price})
@@ -31,5 +34,24 @@
 	WHERE
 	`p_id` = #{id} ;
     </update>
+
+    <insert id="insertByBatch" parameterType="java.util.List">
+        INSERT INTO t_product(p_name,p_price)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.name},#{item.price})
+        </foreach>
+    </insert>
+
+    <select id="selectByBatch" parameterType="java.util.Arrays" resultMap="productMap">
+        SELECT
+        <include refid="allparam"/>
+        FROM
+        t_product
+        WHERE p_id IN
+        <foreach collection="array" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
 
 </mapper>
